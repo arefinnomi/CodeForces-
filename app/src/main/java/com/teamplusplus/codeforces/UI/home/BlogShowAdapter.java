@@ -32,7 +32,7 @@ class BlogShowAdapter extends ArrayAdapter<BlogEntry> {
 
     public BlogShowAdapter(Context context, List<BlogEntry> objects) {
 
-        super(context, R.layout.single_post_view, objects);
+        super(context, R.layout.cardview_single_post, objects);
     }
 
     @Override
@@ -43,7 +43,7 @@ class BlogShowAdapter extends ArrayAdapter<BlogEntry> {
         if (v == null) {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.single_post_view, null);
+            v = vi.inflate(R.layout.cardview_single_post, null);
         }
 
         BlogEntry blogEntry = getItem(position);
