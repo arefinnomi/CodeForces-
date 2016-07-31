@@ -35,7 +35,6 @@ public class HomeActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Home");
         }
 
-
         attachDrawer(toolbar);
         setupTabs();
 
@@ -88,7 +87,8 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                if (tab == tabLayout.getTabAt(0)) ;
+                    
             }
         });
     }

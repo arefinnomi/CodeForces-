@@ -4,11 +4,11 @@ package com.teamplusplus.codeforces.UI.home;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.teamplusplus.codeforces.R;
@@ -29,10 +29,10 @@ import java.util.ArrayList;
  */
 public class FeedFragment extends Fragment {
 
+    ArrayList<BlogEntry> arrayList;
     //for handling the FeedPostIdLoad class from being invoked while running once
     private boolean runningFeedPostIdLoad = false;
     private BlogShowAdapter mAdepter;
-
 
     public FeedFragment() {
     }
@@ -41,21 +41,22 @@ public class FeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ListView listView = (ListView) inflater.inflate(R.layout.feedlistview, container, false);
-
-//
+        View rootView = inflater.inflate(R.layout.fragment_blog_feed, container, false);
         BlogEntriesDBHelper blogEntriesDBHelper = new BlogEntriesDBHelper(getContext());
-        ArrayList<BlogEntry> arrayList = new ArrayList<>(blogEntriesDBHelper.getAllBlogEntry());
+        arrayList = new ArrayList<>(blogEntriesDBHelper.getAllBlogEntry());
+        new FeedPostIdLoad().execute();
+
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.blogFeed_List);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(false);
 
         mAdepter = new BlogShowAdapter(getContext(), arrayList);
+        recyclerView.addOnScrollListener(new BlogFeedOnScrollListener());
+        recyclerView.setAdapter(mAdepter);
 
-
-        listView.setAdapter(mAdepter);
-        listView.setOnScrollListener(new BlogFeedOnScrollListener());
-
-
-        if (mAdepter.getCount() != 0) new FeedPostIdLoad().execute();
-        return listView;
+        return rootView;
     }
 
 
@@ -92,13 +93,12 @@ public class FeedFragment extends Fragment {
 
             } else {
                 BlogEntriesDBHelper blogEntriesDBHelper = new BlogEntriesDBHelper(getContext());
-
                 TitleBlogEntriesIdsDBHelper titleBlogEntriesIdsDBHelper = new TitleBlogEntriesIdsDBHelper(getContext());
                 for (int postsID : titleBlogEntriesIdsDBHelper.getAllBlogEntry()) {
 
                     if (newLoadedPost > 8) break;
                     if (!blogEntriesDBHelper.has(postsID)) {
-                        newLoadedPost++;
+                        ++newLoadedPost;
                         try {
                             BlogEntryApiRequest blogEntryApiRequest = new BlogEntryApiRequest(postsID);
                             blogEntryApiRequest.request();
@@ -128,32 +128,37 @@ public class FeedFragment extends Fragment {
 
             if (newLoadedPost != 0) {
                 BlogEntriesDBHelper blogEntriesDBHelper = new BlogEntriesDBHelper(getContext());
-                mAdepter.clear();
-                mAdepter.addAll(blogEntriesDBHelper.getAllBlogEntry());
-                mAdepter.sort();
+                arrayList.clear();
+                arrayList.addAll(blogEntriesDBHelper.getAllBlogEntry());
+                mAdepter.notifyDataSetChanged();
+                //TODO sort arrayList
                 newLoadedPost = 0;
             }
         }
     }
 
-
-    private class BlogFeedOnScrollListener implements AbsListView.OnScrollListener {
+    private class BlogFeedOnScrollListener extends RecyclerView.OnScrollListener {
         @Override
-        public void onScrollStateChanged(AbsListView view, int scrollState) {
-        }
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-        @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, final int totalItemCount) {
+            int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+            int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+            final int totalItemCount = linearLayoutManager.getItemCount();
 
             if (runningFeedPostIdLoad) return;
             if (totalItemCount == 0) {
                 new FeedPostIdLoad().execute();
             } else {
-                if (totalItemCount - firstVisibleItem - visibleItemCount == 0) {
+                if (lastVisibleItem + 1 >= totalItemCount) {
+                    new FeedPostIdLoad().execute();
+                } else if (firstVisibleItem == 0 && dy < 0) {
+                    PostIdFetch.nextPostIdInDatabase = false;
+                    PostIdFetch.currentPage = 1;
                     new FeedPostIdLoad().execute();
                 }
             }
         }
-
     }
+
 }

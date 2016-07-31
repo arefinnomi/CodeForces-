@@ -31,7 +31,7 @@
                 android:text="by " />
 
             <TextView
-                android:id="@+id/author_text_view"
+                android:id="@+id/author_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -41,7 +41,7 @@
                 android:text="Author" />
 
             <TextView
-                android:id="@+id/time_textview"
+                android:id="@+id/time_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -50,7 +50,7 @@
         </LinearLayout>
 
         <WebView
-            android:id="@+id/postshow_shortform_webview"
+            android:id="@+id/post_webView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp" />
@@ -70,7 +70,7 @@
                 android:src="@drawable/tags" />
 
             <TextView
-                android:id="@+id/tag_textview"
+                android:id="@+id/tag_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -80,7 +80,7 @@
                 android:text="tag" />
 
             <TextView
-                android:id="@+id/rating_textview"
+                android:id="@+id/rating_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -29,7 +29,6 @@ import org.jsoup.nodes.Document;
 
 public class FullBlogEntryActivity extends AppCompatActivity {
 
-
     private static final String LOG_TAG = FullBlogEntryActivity.class.getSimpleName();
 
     private static final String CODEFORCES_SHARE_HASH_TAG = " #Codeforces++";
@@ -93,10 +92,10 @@ public class FullBlogEntryActivity extends AppCompatActivity {
 
     /* formatting unix timestamp with DateUtils*/
         String string = (String) DateUtils.getRelativeDateTimeString(this, blogEntry.getCreationTimeSeconds(), DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL);
-        ((TextView) v.findViewById(R.id.time_textview)).setText(string);
+        ((TextView) v.findViewById(R.id.time_textView)).setText(string);
 
         final String author = blogEntry.getAuthorHandle();
-        TextView authorTextView = ((TextView) v.findViewById(R.id.author_text_view));
+        TextView authorTextView = ((TextView) v.findViewById(R.id.author_textView));
         authorTextView.setText(author);
         authorTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +111,7 @@ public class FullBlogEntryActivity extends AppCompatActivity {
         if (blogEntry.getRating() > 0) string = "+" + blogEntry.getRating();
         else string = "" + blogEntry.getRating();
 
-        ((TextView) v.findViewById(R.id.rating_textview)).setText(string);
+        ((TextView) v.findViewById(R.id.rating_textView)).setText(string);
 
 
         /**WebView updating*/
@@ -121,7 +120,7 @@ public class FullBlogEntryActivity extends AppCompatActivity {
         Log.d("crushed", blogEntry.getId() + "");
 
         CodeforcesHtmlBuilder codeforcesHtmlBuilder = new CodeforcesHtmlBuilder(document.html());
-        WebView webView = (WebView) v.findViewById(R.id.postshow_shortform_webview);
+        WebView webView = (WebView) v.findViewById(R.id.post_webView);
         string = codeforcesHtmlBuilder.getHtml();
 
         webView.setWebViewClient(new WebViewClient() {
@@ -145,6 +144,6 @@ public class FullBlogEntryActivity extends AppCompatActivity {
         webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         webView.loadDataWithBaseURL("http://codeforces.com", string, "text/html", "utf-8", null);
 
-        ((TextView) v.findViewById(R.id.tag_textview)).setText(blogEntry.getTagsToString());
+        ((TextView) v.findViewById(R.id.tag_textView)).setText(blogEntry.getTagsToString());
     }
 }

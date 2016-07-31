@@ -20,7 +20,7 @@ public class PostIdFetch {
 
     public static final ArrayList<Integer> postsId = new ArrayList<>();
     public static boolean nextPostIdInDatabase = false;
-    private static short currentPage = 1;
+    public static short currentPage = 1;
 
     public static void loadPostId(Context context) throws IOException {
 
