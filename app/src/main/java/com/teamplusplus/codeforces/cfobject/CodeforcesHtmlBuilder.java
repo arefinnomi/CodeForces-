@@ -38,6 +38,7 @@ public class CodeforcesHtmlBuilder {
                 "<link rel=\"stylesheet\" href=\"http://st.codeforces.com/s/75307/markitup/sets/markdown/style.css\" type=\"text/css\" charset=\"utf-8\" />\n" +
                 "</head>\n" +
                 "<body>";
+        head = "";
         String last = "</body>\n" +
                 "</html>";
         this.html = head + html + last;

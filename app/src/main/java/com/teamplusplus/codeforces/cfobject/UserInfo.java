@@ -145,8 +145,8 @@ public class UserInfo {
             } catch (JSONException e) {
                 openId = "not available";
             }
-            title_photo = result.getString("titlePhoto");
-            avatar = result.getString("avatar");
+            title_photo = "http:" + result.getString("titlePhoto");
+            avatar = "http:" + result.getString("avatar");
             lastOnlineTimeSeconds = result
                     .getLong("lastOnlineTimeSeconds") * 1000;
             registrationTimeSeconds = result

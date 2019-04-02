@@ -113,7 +113,7 @@ public class UserDetailsActivityFragment extends Fragment {
             registered.setText(DateUtils.getRelativeDateTimeString(getContext(), userInfo.getRegistrationTimeSeconds(), DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 1));
 
             final ImageView imageView = (ImageView) getActivity().findViewById(R.id.title_photo);
-            Picasso.with(getContext()).load(userInfo.getTitle_photo()).into(imageView);
+            Picasso.get().load(userInfo.getTitle_photo()).into(imageView);
         }
     }
 }
